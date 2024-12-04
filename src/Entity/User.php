@@ -31,6 +31,11 @@ class User
         return $this->id;
     }
 
+    public function setId(): ?int
+    {
+        return $this->$id = $id;
+    }
+
     public function getUsername(): ?string
     {
         return $this->Username;

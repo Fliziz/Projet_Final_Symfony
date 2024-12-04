@@ -3,3 +3,27 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+ListeUtilisateur:
+
+    path:       /users
+    controller: App\Controller\UserController::index
+    methods:    [GET]
+
+AfficheUtilisateur:
+
+    path:       /users/{id}
+    controller: App\Controller\UserController::show
+    methods:    [GET]
+
+CréeUtilisateur:
+
+    path:       /users
+    controller: App\Controller\UserController::create
+    methods:    [POST]
+
+ModifierUtilisateur:
+
+    path:       /users/{id}
+    controller: App\Controller\UserController::update
+    methods:    [PUT]    
