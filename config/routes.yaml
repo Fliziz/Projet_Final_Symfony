@@ -6,24 +6,33 @@ controllers:
 
 ListeUtilisateur:
 
-    path:       /users
+    path:       /admin/users
     controller: App\Controller\UserController::index
     methods:    [GET]
 
 AfficheUtilisateur:
 
-    path:       /users/{id}
+    path:       /admin/users/{id}
     controller: App\Controller\UserController::show
     methods:    [GET]
 
 CréeUtilisateur:
 
-    path:       /users
+    path:       /admin/users
     controller: App\Controller\UserController::create
     methods:    [POST]
 
 ModifierUtilisateur:
 
-    path:       /users/{id}
+    path:       /admin/users/{id}
     controller: App\Controller\UserController::update
     methods:    [PUT]    
+
+SupprimerUtilisateur:
+
+    path:       /admin/users/{id}
+    controller: App\Controller\UserController::delete
+    methods:    [DELETE]
+
+api_login:
+    path: /login

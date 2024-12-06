@@ -2,16 +2,42 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\User #La classe User de l'application
+                property: Email #Le champ utilisé pour identifer un utilisatteur
+        
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            lazy: true
-            provider: users_in_memory
+        #Firewall pour l'authentification via JWT
+        login:
+            pattern: ^/login
+            stateless: true
+            json_login:
+                check_path: /login #Point d'entrée pour l'authentification
+                username_path: Email #Champ utilisé pour le login
+                password_path: Password #Champ utilisé pour le mot de passe
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        # Firewall pour toutes les routes API
+        api:
+            pattern:   ^/
+            stateless: true #PAs de session côté serveur
+            jwt: ~ #Utilisation de JWT pour sécuriser les requêtes
+
+        #Firewall pour la déconnexion
+        logout:
+            pattern: ^/logout
+            stateless: true
+        
+        # dev:
+        #     pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #     security: false
+        # main:
+        #     lazy: true
+        #     provider: users_in_memory
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -22,8 +48,16 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+    # Réstriction : seuls les administrateurs peuvent accéder aux route
+        #- { path: ^/admin, roles: ROLE_ADMIN }
+    #Autorisation pour l'authentification (login)
+       # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        #- { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
+
 
 when@test:
     security:
